@@ -1,0 +1,40 @@
+#!/bin/bash
+# version 1.0
+
+read -p "[»] Masukkan nama file ZIP: " file_zip
+
+# Mengecek keberadaan file ZIP
+if [ -f "${file_zip}" ]; then
+    if [[ "${file_zip##*.}" != "zip" ]];then
+        echo "[-] File '${file_zip}' bukan file ZIP."
+        exit 0
+    fi
+
+else
+    echo "[-] File ZIP '${file_zip}' tidak ditemukan."
+    exit 1
+fi
+
+read -p "[»] Masukkan nama file wordlist: " file_wordlist
+
+# Mengecek keberadaan file wordlist
+if [ ! -f "${file_wordlist}" ]; then
+    echo "[-] File wordlist '${file_wordlist}' tidak ditemukan."
+    exit 1
+fi
+
+# Membaca setiap password dari wordlist dan mencoba untuk mengekstrak file ZIP
+while IFS= read -r kata_sandi; do
+    echo "[*] Mencoba membuka file ZIP dengan kata sandi: {kata_sandi}"
+    # Mencoba mengekstrak file ZIP dengan password dari wordlist
+    if unzip -q -P "$password" "$ZIP_FILE" >/dev/null 2>&1; then
+        echo "[+] Berhasil membuka file ZIP dengan kata sandi: ${kata_sandi}"
+        exit 0
+    else
+        echo "[-] Gagal membuka file ZIP dengan kata sandi: ${kata_sandi}"
+    fi
+done < "${file_wordlist}"
+
+# Jika tidak ada password yang cocok, cetak pesan kesalahan
+echo "[-] Tidak ada password yang cocok ditemukan."
+exit 1
