@@ -25,7 +25,7 @@ fi
 
 # Membaca setiap password dari wordlist dan mencoba untuk mengekstrak file ZIP
 while IFS= read -r kata_sandi; do
-    echo "[*] Mencoba membuka file ZIP dengan kata sandi: {kata_sandi}"
+    echo "[*] Mencoba membuka file ZIP dengan kata sandi: ${kata_sandi}"
     # Mencoba mengekstrak file ZIP dengan password dari wordlist
     if unzip -q -P "${kata_sandi}" "${file_zip}" >/dev/null 2>&1; then
         echo "[+] Berhasil membuka file ZIP dengan kata sandi: ${kata_sandi}"
